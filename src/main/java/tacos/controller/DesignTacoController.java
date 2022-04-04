@@ -22,61 +22,59 @@ import tacos.model.TacoOrder;
 public class DesignTacoController {
 
     @ModelAttribute
-    public void addIngredientsToModel(Model model){
+    public void addIngredientsToModel(Model model) {
         List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
                 new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
                 new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
                 new Ingredient("CARN", "Carnitas", Type.PROTEIN),
-                new Ingredient("TMTO", "Diced Tomatoes",Type.VEGGIES),
-                new Ingredient("LETC","Lettuce",Type.VEGGIES),
-                new Ingredient("CHED","Cheddar", Type.CHEESE),
-                new Ingredient("JACK","Monterrey Jack", Type.CHEESE),
+                new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES),
+                new Ingredient("LETC", "Lettuce", Type.VEGGIES),
+                new Ingredient("CHED", "Cheddar", Type.CHEESE),
+                new Ingredient("JACK", "Monterrey Jack", Type.CHEESE),
                 new Ingredient("SLSA", "Salsa", Type.SAUCE),
-                new Ingredient("SRCR","Sour Cream",Type.SAUCE)
+                new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
         );
 
         Type[] types = Ingredient.Type.values();
-        for(Type type : types){
+        for (Type type : types) {
             Iterable<Ingredient> iterable = filterByType(ingredients, type);
-            System.out.println(iterable);
+            log.info("List {}", iterable);
             model.addAttribute(type.toString().toLowerCase(Locale.ROOT),
                     iterable);
-
-            System.out.println("\n");
         }
     }
 
     @ModelAttribute(name = "tacoOrder")
-    public TacoOrder order(){
+    public TacoOrder order() {
         return new TacoOrder();
     }
 
     @ModelAttribute(name = "taco")
-    public Taco taco(){
+    public Taco taco() {
         Taco taco = new Taco();
-        System.out.println(taco);
+        log.info("Our taco: {}", taco);
         return new Taco();
     }
 
     @GetMapping
-    public String showDesignForm(){
+    public String showDesignForm() {
         return "design";
     }
 
     private Iterable<Ingredient> filterByType(
             List<Ingredient> ingredients, Type type
-    ){
+    ) {
         return ingredients.stream()
-                .filter(x->x.getType().equals(type))
+                .filter(x -> x.getType().equals(type))
                 .collect(Collectors.toList());
     }
 
     @PostMapping
     public String processTaco(Taco taco,
-                              @ModelAttribute TacoOrder tacoOrder){
+                              @ModelAttribute TacoOrder tacoOrder) {
         tacoOrder.addTaco(taco);
-        log.info("Processing taco: {}",taco);
+        log.info("Processing taco: {}", taco);
 
         return "redirect:/orders/current";
     }

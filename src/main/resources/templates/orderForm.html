@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Taco Cloud</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <form method="POST" th:action="@{/orders}" th:object="${tacoOrder}"
+        class="bg-secondary mx-auto d-block text-center" style="width: 60%">
+        <h1>Order your taco creations!</h1>
+
+        <img th:src="@{/images/taco.png}" class="w-25 h-25"/>
+
+        <h3>Your tacos in this order:</h3>
+        <a th:href="@{/design}" class="btn btn-danger">design another taco</a><br/>
+        <ul>
+            <li th:each="taco : ${tacoOrder.tacos}">
+                <span th:text="${taco.name}">taco name</span>
+            </li>
+        </ul>
+
+        <div class="row">
+            <table class="col-6">
+                <tr>
+                    <th colspan="2">
+                        Delivery my taco masterpiece to...
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="deliveryName">Name: </label>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{deliveryName}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="deliveryStreet">Street address: </label>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{deliveryStreet}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="deliveryCity">City: </label>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{deliveryCity}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="deliveryState">State: </label>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{deliveryState}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="deliveryZip">Zip code: </label>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{deliveryZip}"/>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="col-6">
+                <tr>
+                    <th colspan="2">
+                        Here's how I'll pay...
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="ccNumber">Credit Card #: </label>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{ccNumber}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="ccExpiration">Expiration: </label>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{ccExpiration}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="ccCVV">CVV: </label>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{ccCVV}"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <input type="submit" value="Submit order" class="btn btn-primary mt-3"/>
+
+    </form>
+</body>
+</html>
