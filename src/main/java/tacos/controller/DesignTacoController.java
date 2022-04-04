@@ -3,10 +3,7 @@ package tacos.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import tacos.model.Ingredient;
 
 import java.util.Arrays;
@@ -29,7 +26,6 @@ public class DesignTacoController {
         List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
                 new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
-                new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
                 new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
                 new Ingredient("CARN", "Carnitas", Type.PROTEIN),
                 new Ingredient("TMTO", "Diced Tomatoes",Type.VEGGIES),
@@ -42,8 +38,12 @@ public class DesignTacoController {
 
         Type[] types = Ingredient.Type.values();
         for(Type type : types){
+            Iterable<Ingredient> iterable = filterByType(ingredients, type);
+            System.out.println(iterable);
             model.addAttribute(type.toString().toLowerCase(Locale.ROOT),
-                    filterByType(ingredients, type));
+                    iterable);
+
+            System.out.println("\n");
         }
     }
 
@@ -54,6 +54,8 @@ public class DesignTacoController {
 
     @ModelAttribute(name = "taco")
     public Taco taco(){
+        Taco taco = new Taco();
+        System.out.println(taco);
         return new Taco();
     }
 
@@ -68,5 +70,14 @@ public class DesignTacoController {
         return ingredients.stream()
                 .filter(x->x.getType().equals(type))
                 .collect(Collectors.toList());
+    }
+
+    @PostMapping
+    public String processTaco(Taco taco,
+                              @ModelAttribute TacoOrder tacoOrder){
+        tacoOrder.addTaco(taco);
+        log.info("Processing taco: {}",taco);
+
+        return "redirect:/orders/current";
     }
 }
