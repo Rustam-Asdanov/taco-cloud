@@ -3,6 +3,7 @@ package tacos.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import tacos.model.Ingredient;
 
@@ -15,10 +16,12 @@ import tacos.model.Ingredient.Type;
 import tacos.model.Taco;
 import tacos.model.TacoOrder;
 
+import javax.validation.Valid;
+
 @Slf4j
 @Controller
 @RequestMapping("/design")
-@SessionAttributes("tacoOrder")
+@SessionAttributes({"tacoOrder","message"})
 public class DesignTacoController {
 
     @ModelAttribute
@@ -57,6 +60,12 @@ public class DesignTacoController {
         return new Taco();
     }
 
+    //Test
+    @ModelAttribute(name = "message")
+    public String getMessage(){
+        return "Hello from Asia";
+    }
+
     @GetMapping
     public String showDesignForm() {
         return "design";
@@ -71,8 +80,13 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processTaco(Taco taco,
+    public String processTaco(@Valid Taco taco, Errors errors,
                               @ModelAttribute TacoOrder tacoOrder) {
+
+        if(errors.hasErrors()){
+            return "design";
+        }
+
         tacoOrder.addTaco(taco);
         log.info("Processing taco: {}", taco);
 
