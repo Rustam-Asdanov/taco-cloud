@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import tacos.data.OrderRepository;
 import tacos.model.TacoOrder;
 
 import javax.validation.Valid;
@@ -14,6 +15,12 @@ import javax.validation.Valid;
 @RequestMapping("/orders")
 @SessionAttributes({"tacoOrder","message"})
 public class OrderController {
+
+    private OrderRepository orderRepository;
+
+    public OrderController(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
 
     @GetMapping("/current")
     public String orderForm(){
@@ -30,11 +37,11 @@ public class OrderController {
             return "orderForm";
         }
 
+        orderRepository.save(order);
         log.info("Order submitted: {}", order);
         log.info("Our session before: {}", sessionStatus.isComplete());
         sessionStatus.setComplete();
         log.info("Our session after: {}", sessionStatus.isComplete());
-
         return "redirect:/";
     }
 }
