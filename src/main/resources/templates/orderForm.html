@@ -96,7 +96,7 @@
                         <label for="ccNumber">Credit Card #: </label>
                     </td>
                     <td>
-                        <input type="text" th:field="*{ccNumber}"/>
+                        <input type="number"  size="16" th:field="*{ccNumber}" value="5555555555554444"/>
                         <span class="text-danger"
                               th:if="${#fields.hasErrors('ccNumber')}"
                               th:errors="*{ccNumber}">ccNumber Error</span>

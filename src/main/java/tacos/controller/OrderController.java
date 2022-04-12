@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @Slf4j
 @Controller
 @RequestMapping("/orders")
-@SessionAttributes({"tacoOrder","message"})
+@SessionAttributes("tacoOrder")
 public class OrderController {
 
     private OrderRepository orderRepository;
@@ -28,17 +28,18 @@ public class OrderController {
     }
 
     @PostMapping
-    public String processOrder(@SessionAttribute("message") String message, @Valid TacoOrder order,
+    public String processOrder(@Valid TacoOrder order,
                                Errors errors, SessionStatus sessionStatus){
         // test retrieve
-        log.info("Our message {}",message);
+//        log.info("Our message {}",message);
+        log.info("Order submitted: {}", order);
 
         if(errors.hasErrors()){
             return "orderForm";
         }
 
         orderRepository.save(order);
-        log.info("Order submitted: {}", order);
+
         log.info("Our session before: {}", sessionStatus.isComplete());
         sessionStatus.setComplete();
         log.info("Our session after: {}", sessionStatus.isComplete());
